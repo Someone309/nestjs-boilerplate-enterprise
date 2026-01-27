@@ -1,0 +1,3 @@
+# Cache Implementations
+# Redis, in-memory cache adapters
+# Implements cache service interfaces

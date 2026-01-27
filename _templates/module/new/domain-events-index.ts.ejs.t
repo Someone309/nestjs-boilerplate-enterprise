@@ -1,0 +1,6 @@
+---
+to: src/modules/<%= name %>/domain/events/index.ts
+---
+export * from './<%= name %>-created.event';
+export * from './<%= name %>-updated.event';
+export * from './<%= name %>-deleted.event';

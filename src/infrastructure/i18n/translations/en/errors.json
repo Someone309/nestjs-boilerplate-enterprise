@@ -1,0 +1,49 @@
+{
+  "http": {
+    "badRequest": "Bad request",
+    "unauthorized": "Unauthorized",
+    "forbidden": "Forbidden",
+    "notFound": "Resource not found",
+    "methodNotAllowed": "Method not allowed",
+    "conflict": "Resource already exists",
+    "unprocessableEntity": "Unprocessable entity",
+    "tooManyRequests": "Too many requests. Please try again later.",
+    "internalServerError": "Internal server error",
+    "serviceUnavailable": "Service temporarily unavailable"
+  },
+  "database": {
+    "connectionFailed": "Database connection failed",
+    "queryFailed": "Database query failed",
+    "transactionFailed": "Database transaction failed",
+    "recordNotFound": "Record not found",
+    "duplicateEntry": "Duplicate entry"
+  },
+  "file": {
+    "uploadFailed": "File upload failed",
+    "downloadFailed": "File download failed",
+    "deleteFailed": "File deletion failed",
+    "notFound": "File not found",
+    "tooLarge": "File size exceeds the maximum allowed limit",
+    "invalidType": "Invalid file type",
+    "invalidName": "Invalid file name"
+  },
+  "email": {
+    "sendFailed": "Failed to send email",
+    "invalidAddress": "Invalid email address",
+    "templateNotFound": "Email template not found"
+  },
+  "cache": {
+    "connectionFailed": "Cache connection failed",
+    "operationFailed": "Cache operation failed"
+  },
+  "queue": {
+    "connectionFailed": "Queue connection failed",
+    "jobFailed": "Job processing failed"
+  },
+  "generic": {
+    "unknown": "An unknown error occurred",
+    "timeout": "Operation timed out",
+    "networkError": "Network error",
+    "rateLimited": "Rate limit exceeded"
+  }
+}

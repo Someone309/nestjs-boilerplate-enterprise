@@ -1,0 +1,149 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // or "mysql", "sqlite", "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// Base model pattern for common fields
+// ============================================
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  firstName     String?   @map("first_name")
+  lastName      String?   @map("last_name")
+  status        UserStatus @default(PENDING_VERIFICATION)
+  emailVerified Boolean   @default(false) @map("email_verified")
+
+  // Relations
+  tenantId      String?   @map("tenant_id")
+  tenant        Tenant?   @relation(fields: [tenantId], references: [id])
+  roles         UserRole[]
+  refreshTokens RefreshToken[]
+
+  // Timestamps
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+
+  @@map("users")
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING_VERIFICATION
+  SUSPENDED
+}
+
+model Role {
+  id          String     @id @default(uuid())
+  name        String     @unique
+  description String?
+  permissions String[]   @default([])
+  isSystem    Boolean    @default(false) @map("is_system")
+
+  // Relations
+  users       UserRole[]
+
+  // Timestamps
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@map("roles")
+}
+
+model UserRole {
+  userId    String   @map("user_id")
+  roleId    String   @map("role_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  assignedAt DateTime @default(now()) @map("assigned_at")
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+}
+
+model Tenant {
+  id          String       @id @default(uuid())
+  name        String
+  slug        String       @unique
+  status      TenantStatus @default(ACTIVE)
+  settings    Json         @default("{}")
+  ownerId     String?      @map("owner_id")
+  trialEndsAt DateTime?    @map("trial_ends_at")
+
+  // Relations
+  users       User[]
+
+  // Timestamps
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  deletedAt   DateTime?    @map("deleted_at")
+
+  @@map("tenants")
+}
+
+enum TenantStatus {
+  ACTIVE
+  INACTIVE
+  TRIAL
+  SUSPENDED
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid())
+  token     String    @unique
+  userId    String    @map("user_id")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deviceInfo String?  @map("device_info")
+  ipAddress String?   @map("ip_address")
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+
+  // Timestamps
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+// ============================================
+// Audit Log (for AuditModule)
+// ============================================
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  action      String   // CREATE, UPDATE, DELETE, etc.
+  entityType  String   @map("entity_type")
+  entityId    String   @map("entity_id")
+  userId      String?  @map("user_id")
+  tenantId    String?  @map("tenant_id")
+  oldValues   Json?    @map("old_values")
+  newValues   Json?    @map("new_values")
+  ipAddress   String?  @map("ip_address")
+  userAgent   String?  @map("user_agent")
+  metadata    Json?
+
+  // Timestamps
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([entityType, entityId])
+  @@index([userId])
+  @@index([tenantId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}

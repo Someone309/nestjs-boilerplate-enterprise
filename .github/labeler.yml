@@ -1,0 +1,91 @@
+# ==============================================
+# GitHub Labeler Configuration
+# ==============================================
+
+# Documentation
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - 'docs/**/*'
+
+# Dependencies
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'package.json'
+          - 'yarn.lock'
+
+# Configuration
+config:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '*.config.*'
+          - '.env*'
+          - 'tsconfig*.json'
+          - 'nest-cli.json'
+
+# Infrastructure
+infrastructure:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/infrastructure/**/*'
+          - 'Dockerfile*'
+          - 'docker-compose*.yml'
+          - '.github/**/*'
+
+# Database
+database:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/infrastructure/persistence/**/*'
+          - '**/migrations/**/*'
+          - '**/seeds/**/*'
+
+# Tests
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.spec.ts'
+          - '**/*.test.ts'
+          - 'test/**/*'
+          - 'jest*.config.*'
+
+# API
+api:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/**/controllers/**/*'
+          - 'src/**/dtos/**/*'
+          - 'src/presentation/**/*'
+
+# Domain
+domain:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/**/domain/**/*'
+          - 'src/core/**/*'
+
+# Auth
+auth:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/modules/auth/**/*'
+          - '**/guards/**/*'
+          - '**/jwt*'
+
+# Security
+security:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/infrastructure/security/**/*'
+          - '**/sanitiz*'
+          - '**/throttl*'
+
+# CI/CD
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/**/*'
+          - 'Dockerfile*'
+          - 'docker-compose*.yml'

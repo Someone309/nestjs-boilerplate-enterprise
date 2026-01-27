@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# Validate commit message format
+# Format: type(scope): message
+# Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+# Regex pattern for conventional commits
+pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-zA-Z0-9_-]+\))?: .{1,100}"
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo "ERROR: Invalid commit message format!"
+  echo ""
+  echo "Expected format: type(scope): message"
+  echo ""
+  echo "Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+  echo ""
+  echo "Examples:"
+  echo "  feat(auth): add JWT authentication"
+  echo "  fix(user): resolve null pointer exception"
+  echo "  docs: update README"
+  echo ""
+  exit 1
+fi

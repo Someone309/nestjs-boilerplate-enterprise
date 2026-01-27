@@ -1,0 +1,49 @@
+{
+  "http": {
+    "badRequest": "Solicitud inválida",
+    "unauthorized": "No autorizado",
+    "forbidden": "Prohibido",
+    "notFound": "Recurso no encontrado",
+    "methodNotAllowed": "Método no permitido",
+    "conflict": "El recurso ya existe",
+    "unprocessableEntity": "Entidad no procesable",
+    "tooManyRequests": "Demasiadas solicitudes. Por favor intenta más tarde.",
+    "internalServerError": "Error interno del servidor",
+    "serviceUnavailable": "Servicio temporalmente no disponible"
+  },
+  "database": {
+    "connectionFailed": "Falló la conexión a la base de datos",
+    "queryFailed": "Falló la consulta a la base de datos",
+    "transactionFailed": "Falló la transacción de la base de datos",
+    "recordNotFound": "Registro no encontrado",
+    "duplicateEntry": "Entrada duplicada"
+  },
+  "file": {
+    "uploadFailed": "Falló la subida del archivo",
+    "downloadFailed": "Falló la descarga del archivo",
+    "deleteFailed": "Falló la eliminación del archivo",
+    "notFound": "Archivo no encontrado",
+    "tooLarge": "El tamaño del archivo excede el límite máximo permitido",
+    "invalidType": "Tipo de archivo inválido",
+    "invalidName": "Nombre de archivo inválido"
+  },
+  "email": {
+    "sendFailed": "Falló el envío del correo",
+    "invalidAddress": "Dirección de correo inválida",
+    "templateNotFound": "Plantilla de correo no encontrada"
+  },
+  "cache": {
+    "connectionFailed": "Falló la conexión al caché",
+    "operationFailed": "Falló la operación de caché"
+  },
+  "queue": {
+    "connectionFailed": "Falló la conexión a la cola",
+    "jobFailed": "Falló el procesamiento del trabajo"
+  },
+  "generic": {
+    "unknown": "Ocurrió un error desconocido",
+    "timeout": "La operación ha excedido el tiempo de espera",
+    "networkError": "Error de red",
+    "rateLimited": "Límite de velocidad excedido"
+  }
+}

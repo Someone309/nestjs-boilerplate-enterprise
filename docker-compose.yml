@@ -1,0 +1,166 @@
+# ==============================================
+# Docker Compose for Development
+# Section 12.8: Deployment Strategy
+# ==============================================
+# Usage:
+#   docker-compose up -d        # Start all services
+#   docker-compose logs -f app  # View app logs
+#   docker-compose down -v      # Stop and remove volumes
+# ==============================================
+
+services:
+  # ----------------------------------------------
+  # Application
+  # ----------------------------------------------
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: deps  # Use deps stage for development
+    container_name: nestjs-app
+    restart: unless-stopped
+    working_dir: /app
+    command: yarn start:dev
+    ports:
+      - "${PORT:-3000}:3000"
+      - "9229:9229"  # Debug port
+    volumes:
+      - .:/app
+      - /app/node_modules  # Preserve container's node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=${DB_USERNAME:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_DATABASE=${DB_DATABASE:-nestjs_dev}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-15m}
+      - JWT_REFRESH_EXPIRES_IN=${JWT_REFRESH_EXPIRES_IN:-7d}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nestjs-network
+
+  # ----------------------------------------------
+  # PostgreSQL Database
+  # ----------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: nestjs-postgres
+    restart: unless-stopped
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    environment:
+      - POSTGRES_USER=${DB_USERNAME:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
+      - POSTGRES_DB=${DB_DATABASE:-nestjs_dev}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_DATABASE:-nestjs_dev}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nestjs-network
+
+  # ----------------------------------------------
+  # Redis Cache
+  # ----------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: nestjs-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nestjs-network
+
+  # ----------------------------------------------
+  # pgAdmin (Database Management UI)
+  # ----------------------------------------------
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: nestjs-pgadmin
+    restart: unless-stopped
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL:-admin@admin.com}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-admin}
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - nestjs-network
+    profiles:
+      - tools  # Only start with: docker-compose --profile tools up
+
+  # ----------------------------------------------
+  # Redis Commander (Redis Management UI)
+  # ----------------------------------------------
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: nestjs-redis-commander
+    restart: unless-stopped
+    ports:
+      - "${REDIS_COMMANDER_PORT:-8081}:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    depends_on:
+      - redis
+    networks:
+      - nestjs-network
+    profiles:
+      - tools  # Only start with: docker-compose --profile tools up
+
+  # ----------------------------------------------
+  # Mailhog (Email Testing)
+  # ----------------------------------------------
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: nestjs-mailhog
+    restart: unless-stopped
+    ports:
+      - "${MAILHOG_SMTP_PORT:-1025}:1025"  # SMTP
+      - "${MAILHOG_UI_PORT:-8025}:8025"    # Web UI
+    networks:
+      - nestjs-network
+    profiles:
+      - tools
+
+# ----------------------------------------------
+# Networks
+# ----------------------------------------------
+networks:
+  nestjs-network:
+    driver: bridge
+
+# ----------------------------------------------
+# Volumes
+# ----------------------------------------------
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local

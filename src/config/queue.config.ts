@@ -1,0 +1,34 @@
+import { registerAs } from '@nestjs/config';
+
+/**
+ * Queue Configuration
+ *
+ * Environment variables:
+ * - REDIS_HOST: Redis host for Bull queue
+ * - REDIS_PORT: Redis port (default: 6379)
+ * - REDIS_PASSWORD: Redis password (optional)
+ * - REDIS_DB: Redis database number (default: 0)
+ * - QUEUE_PREFIX: Prefix for queue names (default: bull)
+ * - QUEUE_DEFAULT_JOB_OPTIONS_ATTEMPTS: Default job retry attempts (default: 3)
+ * - QUEUE_DEFAULT_JOB_OPTIONS_BACKOFF: Backoff delay in ms (default: 5000)
+ */
+export const queueConfig = registerAs('queue', () => ({
+  redis: {
+    host: process.env.REDIS_HOST || 'localhost',
+    port: parseInt(process.env.REDIS_PORT || '6379', 10),
+    password: process.env.REDIS_PASSWORD || undefined,
+    db: parseInt(process.env.REDIS_DB || '0', 10),
+  },
+  prefix: process.env.QUEUE_PREFIX || 'bull',
+  defaultJobOptions: {
+    attempts: parseInt(process.env.QUEUE_DEFAULT_JOB_OPTIONS_ATTEMPTS || '3', 10),
+    backoff: {
+      type: 'exponential' as const,
+      delay: parseInt(process.env.QUEUE_DEFAULT_JOB_OPTIONS_BACKOFF || '5000', 10),
+    },
+    removeOnComplete: 100, // Keep last 100 completed jobs
+    removeOnFail: 50, // Keep last 50 failed jobs
+  },
+}));
+
+export type QueueConfig = ReturnType<typeof queueConfig>;

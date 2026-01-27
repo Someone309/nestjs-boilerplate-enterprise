@@ -1,0 +1,58 @@
+import { registerAs } from '@nestjs/config';
+
+/**
+ * Parse duration string (e.g., '15m', '7d', '1h') to seconds
+ */
+function parseDuration(duration: string): number {
+  const match = /^(\d+)([smhd])$/.exec(duration);
+  if (!match) {
+    return parseInt(duration, 10) || 900; // Default 15 minutes
+  }
+
+  const value = parseInt(match[1], 10);
+  const unit = match[2];
+
+  switch (unit) {
+    case 's':
+      return value;
+    case 'm':
+      return value * 60;
+    case 'h':
+      return value * 60 * 60;
+    case 'd':
+      return value * 60 * 60 * 24;
+    default:
+      return value;
+  }
+}
+
+/**
+ * JWT Configuration
+ *
+ * Following Section 12.5 - JWT Security Best Practices
+ */
+export const jwtConfig = registerAs('jwt', () => ({
+  // Algorithm (Section 12.5 recommends RS256 or ES256 for production)
+  algorithm: (process.env.JWT_ALGORITHM as 'RS256' | 'HS256' | 'ES256') || 'HS256',
+
+  // Keys
+  // For RS256/ES256 (asymmetric)
+  privateKey: process.env.JWT_PRIVATE_KEY,
+  publicKey: process.env.JWT_PUBLIC_KEY,
+
+  // For HS256 (symmetric - not recommended for multi-service)
+  secret: process.env.JWT_SECRET || 'your-super-secret-key-change-in-production',
+
+  // Token expiration (in seconds)
+  accessTokenExpiresIn: parseDuration(process.env.JWT_ACCESS_TOKEN_EXPIRES_IN || '15m'),
+  refreshTokenExpiresIn: parseDuration(process.env.JWT_REFRESH_TOKEN_EXPIRES_IN || '7d'),
+
+  // Token claims
+  issuer: process.env.JWT_ISSUER || 'auth.example.com',
+  audience: process.env.JWT_AUDIENCE || 'api.example.com',
+
+  // Blacklist (using Redis)
+  blacklistEnabled: process.env.JWT_BLACKLIST_ENABLED !== 'false',
+}));
+
+export type JwtConfig = ReturnType<typeof jwtConfig>;
