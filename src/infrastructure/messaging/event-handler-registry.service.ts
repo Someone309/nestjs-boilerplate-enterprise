@@ -56,11 +56,24 @@ export class EventHandlerRegistryService implements OnModuleInit {
 
       // Get all method names from the prototype
       const prototype = Object.getPrototypeOf(instance) as object;
-      const methodNames = Object.getOwnPropertyNames(prototype).filter(
-        (name) =>
-          name !== 'constructor' &&
-          typeof (instance as Record<string, unknown>)[name] === 'function',
-      );
+      const methodNames: string[] = [];
+
+      for (const name of Object.getOwnPropertyNames(prototype)) {
+        if (name === 'constructor') {
+          continue;
+        }
+
+        try {
+          // Safely check if the property is a function
+          // Some providers (like GraphQLSchemaHost) have getters that throw during initialization
+          const prop = (instance as Record<string, unknown>)[name];
+          if (typeof prop === 'function') {
+            methodNames.push(name);
+          }
+        } catch {
+          // Skip properties that throw when accessed
+        }
+      }
 
       methodNames.forEach((methodName) => {
         const method = (instance as Record<string, unknown>)[methodName];

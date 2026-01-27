@@ -74,7 +74,8 @@ export class NotificationGateway
   afterInit(server: Server): void {
     const config = this.configService.get<WebSocketConfig>('websocket');
 
-    if (config) {
+    // Configure engine options if available (may not be present in test environment)
+    if (config && server.engine?.opts) {
       server.engine.opts.pingTimeout = config.pingTimeout;
       server.engine.opts.pingInterval = config.pingInterval;
     }

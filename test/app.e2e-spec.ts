@@ -16,11 +16,12 @@ describe('App (e2e)', () => {
     await closeTestApp(app);
   });
 
-  describe('GET /', () => {
+  describe('GET /api/v1', () => {
     it('should return welcome message', async () => {
-      const response = await req.get('/');
+      const response = await req.get('/api/v1');
 
       expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('message');
     });
   });
 
@@ -50,7 +51,7 @@ describe('App (e2e)', () => {
 
   describe('CORS', () => {
     it('should include CORS headers', async () => {
-      const response = await req.get('/').set('Origin', 'http://localhost:3000');
+      const response = await req.get('/api/v1').set('Origin', 'http://localhost:3000');
 
       // CORS headers should be present
       expect(response.headers).toHaveProperty('access-control-allow-origin');

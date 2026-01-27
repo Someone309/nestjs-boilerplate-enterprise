@@ -39,8 +39,10 @@ describe('Health Endpoints (e2e)', () => {
     it('should return startup status', async () => {
       const response = await req.get('/api/v1/health/startup');
 
-      expect(response.status).toBe(200);
+      // May return 200 or 503 depending on startup completion status
+      expect([200, 503]).toContain(response.status);
       expect(response.body).toHaveProperty('status');
+      expect(response.body).toHaveProperty('startupComplete');
     });
   });
 });

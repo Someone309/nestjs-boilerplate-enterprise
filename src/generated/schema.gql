@@ -1,0 +1,51 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  updateMe(input: UpdateUserInput!): User!
+}
+
+type PaginatedUsers {
+  data: [User!]!
+  limit: Float!
+  page: Float!
+  total: Float!
+  totalPages: Float!
+}
+
+input PaginationInput {
+  limit: Int = 20
+  page: Int = 1
+  sortField: String
+  sortOrder: String = "DESC"
+}
+
+type Query {
+  me: User!
+  user(id: ID!): User
+  users(pagination: PaginationInput): PaginatedUsers!
+}
+
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  firstName: String!
+  fullName: String!
+  id: ID!
+  isActive: Boolean!
+  isEmailVerified: Boolean!
+  lastLoginAt: DateTime
+  lastName: String!
+  updatedAt: DateTime!
+}

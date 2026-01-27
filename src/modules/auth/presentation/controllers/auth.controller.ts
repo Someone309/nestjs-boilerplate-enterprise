@@ -465,16 +465,26 @@ export class AuthController {
     // Try from subdomain
     const host = req.hostname || req.headers.host;
     if (host) {
-      const subdomain = host.split('.')[0];
-      if (subdomain && subdomain !== 'www' && subdomain !== 'api') {
-        // In production, look up tenant by subdomain
-        // For now, use subdomain as tenant ID
-        return subdomain;
+      // Skip localhost/IP addresses - they don't have valid subdomains
+      const isLocalhost =
+        host === 'localhost' ||
+        host.startsWith('127.') ||
+        host.startsWith('192.168.') ||
+        host.startsWith('10.') ||
+        /^\d+\.\d+\.\d+\.\d+(:\d+)?$/.test(host);
+
+      if (!isLocalhost) {
+        const subdomain = host.split('.')[0];
+        if (subdomain && subdomain !== 'www' && subdomain !== 'api') {
+          // In production, look up tenant by subdomain
+          // For now, use subdomain as tenant ID
+          return subdomain;
+        }
       }
     }
 
-    // Default tenant (for development)
-    return 'default';
+    // Default tenant (for development) - nil UUID
+    return '00000000-0000-0000-0000-000000000000';
   }
 
   /**
