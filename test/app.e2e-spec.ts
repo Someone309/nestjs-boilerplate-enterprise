@@ -27,9 +27,9 @@ describe('App (e2e)', () => {
   describe('API Versioning', () => {
     it('should have /api/v1 prefix', async () => {
       // Health endpoint should be accessible with version prefix
-      const response = await req.get('/api/v1/health');
+      const response = await req.get('/api/v1/health/live');
 
-      expect([200, 503]).toContain(response.status);
+      expect(response.status).toBe(200);
     });
   });
 
@@ -59,7 +59,7 @@ describe('App (e2e)', () => {
 
   describe('Content-Type', () => {
     it('should return JSON content type for API endpoints', async () => {
-      const response = await req.get('/api/v1/health');
+      const response = await req.get('/api/v1/health/live');
 
       expect(response.headers['content-type']).toMatch(/application\/json/);
     });

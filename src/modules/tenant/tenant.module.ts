@@ -7,7 +7,6 @@ import {
   UpdateTenantUseCase,
   DeleteTenantUseCase,
 } from './application/use-cases';
-import { TENANT_REPOSITORY } from './domain/repositories/tenant.repository.interface';
 
 /**
  * Tenant Module
@@ -29,13 +28,13 @@ import { TENANT_REPOSITORY } from './domain/repositories/tenant.repository.inter
     DeleteTenantUseCase,
   ],
   exports: [
-    // TENANT_REPOSITORY is provided by the database module
+    // Export use cases for other modules
+    // Note: TENANT_REPOSITORY is provided globally by DatabaseModule
     CreateTenantUseCase,
     GetTenantUseCase,
     ListTenantsUseCase,
     UpdateTenantUseCase,
     DeleteTenantUseCase,
-    TENANT_REPOSITORY,
   ],
 })
 export class TenantModule {}

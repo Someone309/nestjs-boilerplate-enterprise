@@ -1,5 +1,5 @@
 import { type TestingModule, Test } from '@nestjs/testing';
-import { type INestApplication, ValidationPipe } from '@nestjs/common';
+import { type INestApplication, ValidationPipe, VersioningType } from '@nestjs/common';
 import type { App } from 'supertest/types';
 import { AppModule } from '../../src/app.module';
 
@@ -22,12 +22,17 @@ export async function createTestApp(): Promise<INestApplication<App>> {
       transform: true,
       forbidNonWhitelisted: true,
       transformOptions: {
-        enableImplicitConversion: true,
+        enableImplicitConversion: false,
       },
     }),
   );
 
-  app.setGlobalPrefix('api/v1');
+  // Match production API prefix and versioning
+  app.setGlobalPrefix('api');
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
   app.enableCors();
 
   await app.init();
@@ -38,6 +43,8 @@ export async function createTestApp(): Promise<INestApplication<App>> {
 /**
  * Close test application
  */
-export async function closeTestApp(app: INestApplication): Promise<void> {
-  await app.close();
+export async function closeTestApp(app: INestApplication | undefined): Promise<void> {
+  if (app) {
+    await app.close();
+  }
 }

@@ -16,30 +16,30 @@ describe('Health Endpoints (e2e)', () => {
     await closeTestApp(app);
   });
 
-  describe('GET /api/v1/health', () => {
-    it('should return health status', async () => {
-      const response = await req.get('/api/v1/health');
+  describe('GET /api/v1/health/live', () => {
+    it('should return liveness status', async () => {
+      const response = await req.get('/api/v1/health/live');
 
       expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('status', 'healthy');
+    });
+  });
+
+  describe('GET /api/v1/health/ready', () => {
+    it('should return readiness status', async () => {
+      const response = await req.get('/api/v1/health/ready');
+
+      // May return 200 or 503 depending on service availability
+      expect([200, 503]).toContain(response.status);
       expect(response.body).toHaveProperty('status');
     });
   });
 
-  describe('GET /api/v1/health/liveness', () => {
-    it('should return liveness status', async () => {
-      const response = await req.get('/api/v1/health/liveness');
+  describe('GET /api/v1/health/startup', () => {
+    it('should return startup status', async () => {
+      const response = await req.get('/api/v1/health/startup');
 
       expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('status', 'ok');
-    });
-  });
-
-  describe('GET /api/v1/health/readiness', () => {
-    it('should return readiness status', async () => {
-      const response = await req.get('/api/v1/health/readiness');
-
-      // May return 200 or 503 depending on service availability
-      expect([200, 503]).toContain(response.status);
       expect(response.body).toHaveProperty('status');
     });
   });

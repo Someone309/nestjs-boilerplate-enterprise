@@ -9,7 +9,6 @@ import {
   DeleteUserUseCase,
 } from './application/use-cases';
 import { UserEventHandler } from './application/event-handlers';
-import { USER_REPOSITORY } from './domain/repositories/user.repository.interface';
 
 /**
  * User Module
@@ -38,13 +37,12 @@ import { USER_REPOSITORY } from './domain/repositories/user.repository.interface
   ],
   exports: [
     // Export use cases for other modules
-    // USER_REPOSITORY is provided by the database module
+    // Note: USER_REPOSITORY is provided globally by DatabaseModule
     CreateUserUseCase,
     GetUserUseCase,
     ListUsersUseCase,
     UpdateUserUseCase,
     DeleteUserUseCase,
-    USER_REPOSITORY,
   ],
 })
 export class UserModule {}

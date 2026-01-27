@@ -7,7 +7,6 @@ import {
   UpdateRoleUseCase,
   DeleteRoleUseCase,
 } from './application/use-cases';
-import { ROLE_REPOSITORY } from './domain/repositories/role.repository.interface';
 import { UserModule } from '@modules/user/user.module';
 
 /**
@@ -31,13 +30,13 @@ import { UserModule } from '@modules/user/user.module';
     DeleteRoleUseCase,
   ],
   exports: [
-    // ROLE_REPOSITORY is provided by the database module
+    // Use cases can be used by other modules
+    // Note: ROLE_REPOSITORY is provided globally by DatabaseModule
     CreateRoleUseCase,
     GetRoleUseCase,
     ListRolesUseCase,
     UpdateRoleUseCase,
     DeleteRoleUseCase,
-    ROLE_REPOSITORY,
   ],
 })
 export class RoleModule {}
