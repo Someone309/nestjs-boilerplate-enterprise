@@ -4,8 +4,8 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { createReadStream, createWriteStream } from 'fs';
 import { createHash } from 'crypto';
-import { v4 as uuidv4 } from 'uuid';
 import { Readable, pipeline } from 'stream';
+import { generateUUID } from '@shared/utils';
 import { promisify } from 'util';
 import type {
   IStorageService,
@@ -47,7 +47,7 @@ export class LocalStorageAdapter implements IStorageService {
     const extension = path.extname(originalName);
     const filename = options.preserveOriginalName
       ? originalName
-      : `${options.filename || uuidv4()}${extension}`;
+      : `${options.filename || generateUUID()}${extension}`;
 
     const relativePath = path.join(directory, filename);
     const absolutePath = path.join(this.basePath, relativePath);
