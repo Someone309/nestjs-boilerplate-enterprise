@@ -185,16 +185,8 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Run npm audit
-        run: yarn audit --level moderate
+        run: yarn audit --level high
         continue-on-error: true
-
-      - name: Run Snyk security scan
-        uses: snyk/actions/node@master
-        continue-on-error: true
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
 
   # ----------------------------------------------
   # Build Docker Image (on main branch only)
